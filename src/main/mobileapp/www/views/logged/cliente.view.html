@@ -1,0 +1,60 @@
+<ion-view cache-view="false" view-title="cliente" hide-back-button="true">
+  <ion-nav-buttons side="right"> 
+    <button class="button button-stable" ng-hide="cliente.inserting || cliente.editing" ng-click="cliente.startInserting()"> <i class="icon ion-plus-round"></i> </button>
+    <button class="button button-stable" ng-show="cliente.inserting || cliente.editing" ng-click="cliente.post()"> <i class="icon ion-checkmark"></i> </button>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="left">
+    <button class="button button-icon button-clear ion-navicon" ng-hide="cliente.inserting || cliente.editing" menu-toggle="left"> </button>
+    <button class="button button-stable" ng-show="cliente.inserting || cliente.editing" ng-click="cliente.cancel()"> <i class="icon ion-android-arrow-back"></i> </button>
+  </ion-nav-buttons>
+  <ion-content>
+    <div ng-hide="cliente.inserting || cliente.editing" data-component="crn-datasource-filter" id="crn-datasource-filter-general" class="">
+      <label class="item item-input" id="cloud-search1">
+        <i class="icon ion-search placeholder-icon"></i>
+        <input type="text" ng-model="vars.search" cronapp-filter="nom_cliente;" cronapp-filter-operator="" cronapp-filter-autopost="true" crn-datasource="cliente" value="" placeholder="{{'template.crud.search' | translate}}">
+      </label>
+    </div>   
+    <div class="component-holder ng-binding ng-scope ui-draggable ui-draggable-handle" data-component="crn-datasource" id="crn-datasource-906854">
+      <datasource name="cliente" entity="api/cronapi/crud/app.entity.cliente" keys="id" rows-per-page="10" delete-message="Deseja remover?" class=""></datasource>
+    </div>
+    <div crn-datasource="cliente" class="" ng-hide="cliente.editing || cliente.inserting">
+      <ion-list can-swipe="listCanSwipe">
+        <ion-item ng-repeat="rowData in datasource.data" class="item" ng-click="datasource.startEditing(rowData)">
+          <div class="row">
+            <div class="col">
+              {{rowData.nom_cliente}}
+            </div>
+          </div>
+          <ion-option-button class="button-positive" ng-click="datasource.startEditing(rowData)">
+            <i class="icon ion-edit"></i>
+          </ion-option-button>
+          <ion-option-button class="button-assertive" ng-click="datasource.remove(rowData)">
+            &nbsp;
+            <i class="icon ion-trash-a"></i>
+          </ion-option-button>
+        </ion-item>
+      </ion-list>
+    </div>
+    <div ng-show="cliente.editing || cliente.inserting">
+      <form crn-datasource="cliente">
+        <fieldset ng-disabled="!cliente.editing &amp;&amp; !cliente.inserting">
+          <div class="list">
+            <!-- nom_cliente begin -->
+            <label for="textinput-nom_cliente" class="item item-input item-stacked-label">
+            <span class="input-label">Nome do Cliente</span>
+            <input type="text" placeholder="Nome do Cliente" ng-model="cliente.active.nom_cliente" id="textinput-nom_cliente" name="textinput-nom_cliente">
+            </label><button class="button button-dark component-holder" type="submit" ng-click="cronapi.util.makeCallServerBlocklyAsync('blockly.Bloco:Executar', null, null)" data-component="crn-button" id="crn-button-442193"><i class="ion ion-home"></i> <span>Mostrar Valor</span></button>
+            <!-- fk_equip begin -->
+            <datasource name="Equipamento" entity="api/cronapi/crud/app.entity.Equipamento" keys="id" class=""></datasource>
+            <label for="textinput-fk_equip" class="item item-input item-select">
+              <span class="input-label">Equipamento</span>
+              <select ng-model="cliente.active.fk_equip" class="form-control" id="textinput-fk_equip" name="textinput-fk_equip" ng-options="opt as opt.nome for opt in Equipamento.data track by opt.id">
+              <option value="">None</option>
+              </select>
+            </label>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </ion-content>
+</ion-view>
